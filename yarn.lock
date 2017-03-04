@@ -4687,6 +4687,10 @@ to-fast-properties@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-1.0.2.tgz#f3f5c0c3ba7299a7ef99427e44633257ade43320"
 
+tone@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/tone/-/tone-0.9.0.tgz#9a3de25edf9d3c664d45e381d1ac91ea141b03f9"
+
 topo@1.x.x:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/topo/-/topo-1.1.0.tgz#e9d751615d1bb87dc865db182fa1ca0a5ef536d5"
