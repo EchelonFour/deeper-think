@@ -13,17 +13,16 @@ import { SpeechService } from '../services/speech';
 })
 export class AppComponent implements OnDestroy {
   phrase$: Observable<string>;
-  musicSub: Subscription;
 
   constructor(private af: AngularFire, private music: MusicService, private speech: SpeechService) {
     this.phrase$ = this.af.database.object('/phrase' /** TODO **/)
       .map((ref) => ref.$value)
       .switchMap((phrase) => this.speech.speak$(phrase).startWith(phrase));
 
-    this.musicSub = this.music.play$().subscribe();
+    this.music.play();
   }
 
   ngOnDestroy(): void {
-    this.musicSub.unsubscribe();
+    this.music.stop();
   }
 }

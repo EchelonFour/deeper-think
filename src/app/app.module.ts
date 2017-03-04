@@ -13,8 +13,7 @@ const firebaseConfig: FirebaseAppConfig = {
   apiKey: 'AIzaSyBF_TsfgjGmsojPqdmezj5LbbzQM-uDwes',
   authDomain: 'deeper-think.firebaseapp.com',
   databaseURL: 'https://deeper-think.firebaseio.com',
-  storageBucket: 'deeper-think.appspot.com',
-  messagingSenderId: '628206458048',
+  storageBucket: 'deeper-think.appspot.com'
 };
 
 @NgModule({

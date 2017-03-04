@@ -1,32 +1,31 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import * as _ from 'lodash';
-
-declare var Synth: {
-  createInstrument(instrument: string): SynthInstrument;
-  setVolume(volume: number): void;
-}
-
-declare class SynthInstrument {
-  play(note: string, octave: number, duration: number): void;
-}
-
-const NOTES = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-const OCTAVES = [3, 4];
+import Tone from 'tone';
 
 @Injectable()
 export class MusicService {
-  play$(): Observable<any> {
-    return Observable.timer(0)
-      .map(() => {
-        Synth.setVolume(0.15);
-        return Synth.createInstrument('organ');
-      })
-      .switchMap((piano) => {
-        const duration = _.random(1, 4) / 4;
-        piano.play( _.sample(NOTES), _.sample(OCTAVES), duration );
-        return Observable.timer(duration * 1000);
-      })
-      .repeatWhen((en) => en);
+  constructor() {
+    const synth = new Tone.Synth().toMaster()
+    const piano = new Tone.PolySynth(4, Tone.Synth, {
+			"volume" : -8,
+			"oscillator" : {
+				"partials" : [1, 2, 1],
+			},
+			"portamento" : 0.05
+		}).toMaster()
+    const loop = new Tone.Loop((time: any) =>{
+      //triggered every eighth note. 
+      console.log(time);
+    }, "8n")
+    loop.humanize = true
+    loop.probability = 0.8
+    loop.start(0)
+  }
+  play(): void {
+    Tone.Transport.start(0)
+  }
+  stop(): void {
+    Tone.Transport.stop(0)
   }
 }
