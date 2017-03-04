@@ -9,13 +9,12 @@ import { AppComponent } from './app.component';
 import { MusicService } from '../services/music';
 import { SpeechService } from '../services/speech';
 
-/** TODO **/
 const firebaseConfig: FirebaseAppConfig = {
-  apiKey: 'AIzaSyDRIuNoGLn7fttQ-F5F47YLe4cH1YREGMc',
-  authDomain: 'deeper-think-afb06.firebaseapp.com',
-  databaseURL: 'https://deeper-think-afb06.firebaseio.com',
-  storageBucket: 'deeper-think-afb06.appspot.com',
-  messagingSenderId: '57149301871',
+  apiKey: 'AIzaSyBF_TsfgjGmsojPqdmezj5LbbzQM-uDwes',
+  authDomain: 'deeper-think.firebaseapp.com',
+  databaseURL: 'https://deeper-think.firebaseio.com',
+  storageBucket: 'deeper-think.appspot.com',
+  messagingSenderId: '628206458048',
 };
 
 @NgModule({
