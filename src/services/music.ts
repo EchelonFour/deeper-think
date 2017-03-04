@@ -38,7 +38,7 @@ export class MusicService {
 			"type" : "brown"
     }).toMaster().start();
     this.noiseLoop = new Tone.Loop((time: any) => {
-      noise.volume.rampTo(_.random(-40, -35), '1m')
+      noise.volume.rampTo(_.random(-40, -30), '1m')
     }, '1m')
   }
   play(): void {
