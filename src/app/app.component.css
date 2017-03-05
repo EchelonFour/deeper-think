@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Baloo|Crimson+Text|Gidugu|Griffy|Indie+Flower|Raleway|Ranga|Roboto|Supermercado+One');
 .centred {
     display: flex;
     justify-content: center;
@@ -6,6 +7,6 @@
     padding: 0 10vw;
     margin: 0;
     text-align: center;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: 'Roboto', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 36px;
 }
