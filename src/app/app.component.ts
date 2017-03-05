@@ -3,6 +3,7 @@ import { Observable, Observer, Subscription } from 'rxjs/Rx';
 import { AngularFire } from 'angularfire2';
 import * as _ from 'lodash';
 import * as Color from 'color';
+import * as random from 'seedrandom';
 
 import { MusicService } from '../services/music';
 import { SpeechService } from '../services/speech';
@@ -33,10 +34,14 @@ export class AppComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.music.stop();
   }
+  private range(seed: string, lower: number, upper: number) {
+    const r = random(seed)
+    return lower + Math.floor(r() * (upper - lower + 1))
+  }
   newFont(phrase: string): string {
-    return `${_.sample(this.FONTS)}, sans-serif`;
+    return `${this.FONTS[this.range(phrase, 0, this.FONTS.length - 1)]}, sans-serif`;
   }
   newColor(phrase: string): Color.Color {
-    return this.currentColour.hue(_.random(0, 360))
+    return this.currentColour.hue(this.range(phrase, 0, 360))
   }
 }
