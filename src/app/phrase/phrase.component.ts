@@ -54,6 +54,7 @@ export class PhraseComponent implements OnInit, OnDestroy {
     this.speechSubscription.unsubscribe()
     this.colourSubscription.unsubscribe()
   }
+
   private range(seed: string, lower: number, upper: number) {
     const r = random(seed)
     return lower + Math.floor(r() * (upper - lower + 1))

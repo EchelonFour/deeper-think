@@ -5,11 +5,24 @@ body {
 .centred {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 95vh;
     padding: 0 10vw;
     margin: 0;
     text-align: center;
     font-family: 'Roboto', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    
+}
+.centred.quote {
+    height: 51vh;
+    align-items: flex-end;
     font-size: 36px;
+}
+.centred.share {
+    height: 45vh;
+    align-items: flex-start;
+    font-size: 16px;
+}
+@media(max-width: 480px) {
+    .centred.quote {
+        font-size: 24px;
+    }
 }

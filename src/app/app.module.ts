@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, Route, UrlSegment, UrlSegmentGroup } from '@angular/router';
+import { UrlMatchResult } from '@angular/router/src/config';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
@@ -17,10 +18,19 @@ const firebaseConfig: FirebaseAppConfig = {
   databaseURL: 'https://deeper-think.firebaseio.com',
   storageBucket: 'deeper-think.appspot.com'
 };
-
+//this wont work until https://github.com/angular/angular/issues/14833 resolved
+// function optionalId(segments: UrlSegment[], group: UrlSegmentGroup, route: Route): UrlMatchResult {
+//   if (segments.length == 1) {
+//     return {consumed: segments, posParams: {id: segments[0]}}
+//   }
+//    return {consumed: segments}
+  
+// }
 const routes: Routes = [
+  //{ component: PhraseComponent, matcher: optionalId },
   { path: '', component: PhraseComponent },
   { path: ':id', component: PhraseComponent },
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ]
 @NgModule({
   declarations: [

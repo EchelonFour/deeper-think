@@ -1,3 +1,7 @@
-<span class="centred" [style.font-family]='font$ | async' >
+<span class="centred quote" [style.font-family]='font$ | async' >
   {{ (phraseString$ | async) }}
+</span>
+
+<span class="centred share" >
+<a routerLink="/{{phraseId$ | async}}" routerLinkActive="active">Share</a>
 </span>
