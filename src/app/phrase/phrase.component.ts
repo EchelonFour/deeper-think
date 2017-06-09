@@ -10,35 +10,24 @@ import { AppComponent } from '../app.component';
 import { MusicService } from '../../services/music';
 import { SpeechService } from '../../services/speech';
 
-@Component({
-  selector: 'app-phrase',
-  templateUrl: './phrase.component.html',
-  styleUrls: ['./phrase.component.css']
-})
 export class PhraseComponent implements OnInit, OnDestroy {
   phraseString$: Observable<string>;
   phraseId$: Observable<string>;
   font$: Observable<string>;
   speechSubscription: Subscription;
   colourSubscription: Subscription;
-  private FONTS = ['Baloo', 'Crimson Text', 'Gidugu', 'Griffy', 'Indie Flower', 'Raleway', 'Ranga', 'Roboto', 'Supermercado One'];
+  protected FONTS = ['Baloo', 'Crimson Text', 'Gidugu', 'Griffy', 'Indie Flower', 'Raleway', 'Ranga', 'Roboto', 'Supermercado One'];
 
   constructor(
-    private af: AngularFire,
-    private music: MusicService,
-    private speech: SpeechService,
-    private route: ActivatedRoute,
-    @Host() private parent: AppComponent) {
+    protected af: AngularFire,
+    protected music: MusicService,
+    protected speech: SpeechService,
+    protected route: ActivatedRoute,
+    @Host() protected parent: AppComponent) {
 
   }
 
  ngOnInit(): void {
-    this.phraseId$ = this.route.params.switchMap((params: Params) => {
-      if (params['id']) {
-        return Observable.of(params['id'])
-      }
-      return this.af.database.object('/currentPhrase').map((ref) => ref.$value)
-    })
     this.phraseString$ = this.phraseId$.switchMap((id) => {
       return this.af.database.object(`/phrases/${id}`).map((ref) => ref.phrase)
     })
@@ -55,7 +44,7 @@ export class PhraseComponent implements OnInit, OnDestroy {
     this.colourSubscription.unsubscribe()
   }
 
-  private range(seed: string, lower: number, upper: number) {
+  protected range(seed: string, lower: number, upper: number) {
     const r = random(seed)
     return lower + Math.floor(r() * (upper - lower + 1))
   }

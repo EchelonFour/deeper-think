@@ -1,0 +1,8 @@
+<span class="centred quote" [style.font-family]='font$ | async' >
+  {{ (phraseString$ | async) }}
+</span>
+
+<span class="centred share" >
+<button routerLink="/" routerLinkActive="active"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>&nbsp;
+<button class='clippy' [attr.data-clipboard-text]="clipboardResults$ | async"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
+</span>

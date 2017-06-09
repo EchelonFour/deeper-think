@@ -10,7 +10,8 @@ import { AppComponent } from './app.component';
 
 import { MusicService } from '../services/music';
 import { SpeechService } from '../services/speech';
-import { PhraseComponent } from './phrase/phrase.component';
+import { RotatingPhraseComponent } from './phrase/rotating-phrase.component';
+import { StaticPhraseComponent } from './phrase/static-phrase.component';
 
 const firebaseConfig: FirebaseAppConfig = {
   apiKey: 'AIzaSyBF_TsfgjGmsojPqdmezj5LbbzQM-uDwes',
@@ -28,14 +29,15 @@ const firebaseConfig: FirebaseAppConfig = {
 // }
 const routes: Routes = [
   //{ component: PhraseComponent, matcher: optionalId },
-  { path: '', component: PhraseComponent },
-  { path: ':id', component: PhraseComponent },
+  { path: '', component: RotatingPhraseComponent },
+  { path: ':id', component: StaticPhraseComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ]
 @NgModule({
   declarations: [
     AppComponent,
-    PhraseComponent
+    RotatingPhraseComponent,
+    StaticPhraseComponent
   ],
   imports: [
     BrowserModule,
