@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "postbuild": "cp dist/index.html functions/index.html",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
