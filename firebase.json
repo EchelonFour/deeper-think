@@ -3,6 +3,10 @@
     "public": "dist",
     "rewrites": [
       {
+        "source": "/*",
+        "function": "prerender"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
