@@ -19,7 +19,7 @@ import { SpeechService } from '../../services/speech';
 })
 export class StaticPhraseComponent extends PhraseComponent {
   protected clipboard: Clipboard;
-  protected clipboardResults$: Observable<string>;
+  clipboardResults$: Observable<string>;
 
   constructor(
     af: AngularFire,
