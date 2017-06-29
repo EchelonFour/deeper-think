@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "node"
 script: npm run build -- --prod
-before_deploy: "cd functions && npm install"
+before_deploy: "cd functions && npm install && cd .."
 deploy:
   provider: firebase
   on: master
