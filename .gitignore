@@ -41,3 +41,4 @@ testem.log
 Thumbs.db
 /functions/node_modules
 /functions/index.html
+/functions/lib

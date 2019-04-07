@@ -1,10 +1,33 @@
 {
   "name": "functions",
-  "description": "Cloud Functions for Firebase",
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.1",
-    "firebase-admin": "~4.2.1",
-    "firebase-functions": "^0.5.7"
+  "scripts": {
+    "lint": "tslint --project tsconfig.json",
+    "build": "tsc",
+    "serve": "npm run build && firebase serve --only functions",
+    "shell": "npm run build && firebase experimental:functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
   },
-  "private": true
+  "main": "lib/index.js",
+  "dependencies": {
+    "@google-cloud/language": "^2.1.0",
+    "cheerio": "^1.0.0-rc.2",
+    "firebase-admin": "7.2.0",
+    "firebase-functions": "^2.2.1",
+    "fs-extra": "^5.0.0",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "@google-cloud/firestore": "^1.2.0",
+    "@types/cheerio": "^0.22.7",
+    "@types/lodash": "^4.14.106",
+    "@types/seedrandom": "^2.4.27",
+    "tslint": "^5.15.0",
+    "typescript": "^3.4.2"
+  },
+  "private": true,
+  "engines": {
+    "node": "8"
+  }
 }
