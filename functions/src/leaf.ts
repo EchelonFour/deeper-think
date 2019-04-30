@@ -27,7 +27,8 @@ export interface DBLeaf extends ILeaf {
     lefts: PseudoLeaf[]
     rights: PseudoLeaf[]
     parent: PseudoLeaf,
-    random: number
+    random: number,
+    source: DocumentReference,
 }
 export class Leaf implements ILeaf {
     id: DocumentReference = null
@@ -190,12 +191,13 @@ export class Leaf implements ILeaf {
         yield* this.rights
     }
 
-    public toDBLeaf(): DBLeaf {
+    public toDBLeaf(source: DocumentReference): DBLeaf {
         return Object.assign(this.toWordData(), {
             lefts: this.lefts.map((leaf) => leaf instanceof Leaf ? leaf.toPseudoLeaf() : leaf),
             rights: this.rights.map((leaf) => leaf instanceof Leaf ? leaf.toPseudoLeaf() : leaf),
             parent: this.parent instanceof Leaf ? this.parent.toPseudoLeaf() : this.parent,
-            random: randomNumber()
+            random: randomNumber(),
+            source: source
         })
     }
     public toPseudoLeaf(): PseudoLeaf {

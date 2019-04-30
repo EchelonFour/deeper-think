@@ -55,7 +55,7 @@ export const newSource = functions.firestore.document('sources/{sourceId}').onCr
     const leafs = NLPToTree(syntax)
     const batch = firestore.batch()
     for (const leaf of leafs) {
-        const savable = leaf.toDBLeaf()
+        const savable = leaf.toDBLeaf(event.ref)
         console.info('DB Leaf to be saved', leaf.id, savable)
         batch.create(leaf.id, savable)
     }
