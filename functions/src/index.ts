@@ -4,6 +4,7 @@ import * as language from '@google-cloud/language'
 import * as cheerio from 'cheerio'
 import { firestore, database } from './firebase'
 import { NLPToTree } from './nlp_process'
+import { generatePhrase } from './generate';
 
 export const prerender = functions.https.onRequest(async (req, res) => {
     try {
@@ -59,4 +60,12 @@ export const newSource = functions.firestore.document('sources/{sourceId}').onCr
         batch.create(leaf.id, savable)
     }
     await batch.commit()
+})
+
+export const tick = functions.firestore.document('tick/tick').onWrite(async (event, context) => {
+    console.log('tick at', event.after.data().tick)
+    const phraseId = await generatePhrase()
+    await firestore.collection('tick').doc('currentPhrase').set({
+        id: phraseId
+    })
 })

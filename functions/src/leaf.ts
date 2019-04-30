@@ -6,6 +6,7 @@ import { firestore } from './firebase'
 import { DocumentSnapshot, DocumentReference } from "@google-cloud/firestore"
 
 const leafRef = firestore.collection('leafs')
+const SPACEABLE_PUNCTUATION = ['.', '?', '!']
 export interface WordData extends PartOfSpeech {
     label: DependencyEdge['label']
     metaroot: boolean
@@ -87,17 +88,30 @@ export class Leaf implements ILeaf {
         return metaroot
     }
 
-    static convertFromDb(snapshot: DocumentSnapshot): Leaf{
+    static convertFromDb(snapshot: DocumentSnapshot): Leaf {
         const dbLeaf = snapshot.data() as DBLeaf
         const leaf = new Leaf()
-        Object.keys(this).forEach((key) => {
+        Object.keys(leaf).forEach((key) => {
             if (key in dbLeaf) {
-                this[key] = dbLeaf[key]
+              leaf[key] = dbLeaf[key]
             }
         })
         leaf.id = snapshot.ref
         leaf.hydrated = false
         return leaf
+    }
+    static convertFromPseudoLeaf(pseudoLeaf: PseudoLeaf): Leaf {
+      const leaf = new Leaf()
+      if (pseudoLeaf.treeSize !== 1) {
+        throw new Error('cannot convert a psudo leaf to a real leaf unless it has no children')
+      }
+      Object.keys(leaf).forEach((key) => {
+        if (key in pseudoLeaf) {
+          leaf[key] = pseudoLeaf[key]
+        }
+      })
+      leaf.id = pseudoLeaf.realLeaf
+      return leaf
     }
     static async getAndConvertFromDb(reference: DocumentReference): Promise<Leaf> {
         const snapshot = await reference.get()
@@ -132,7 +146,7 @@ export class Leaf implements ILeaf {
 
     public toPhrase(): string {
         let phrase = ''
-        
+
         let previousLeaf: Leaf = null
         for (const leaf of this.lnrSearch()) {
             if (!leaf.word) {
@@ -146,7 +160,7 @@ export class Leaf implements ILeaf {
             } else if (word === '\'m') {
                 word = 'am'
             }
-            if (previousLeaf === null || previousLeaf.word in ['.', '?', '!']) {
+            if (previousLeaf === null || SPACEABLE_PUNCTUATION.includes(previousLeaf.word)) {
                 word = _.capitalize(word)
             }
             if (leaf.tag !== 'PUNCT' && !word.startsWith("'") && previousLeaf !== null) {
