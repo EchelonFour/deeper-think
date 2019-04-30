@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Host } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Observable, Observer, Subscription } from 'rxjs/Rx';
+import { Observable, Observer, Subscription } from 'rxjs';
 import { AngularFire, FirebaseObjectObservable } from 'angularfire2';
 import { PhraseComponent } from './phrase.component';
 import * as _ from 'lodash';

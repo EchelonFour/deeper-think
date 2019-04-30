@@ -1,6 +1,7 @@
+import {map, switchMap} from 'rxjs/operators';
 import { Component, OnInit, OnDestroy, Host } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Observable, Observer, Subscription } from 'rxjs/Rx';
+import { Observable, Observer, Subscription } from 'rxjs';
 import { AngularFire, FirebaseObjectObservable } from 'angularfire2';
 import * as _ from 'lodash';
 import * as Color from 'color';
@@ -28,13 +29,13 @@ export class PhraseComponent implements OnInit, OnDestroy {
   }
 
  ngOnInit(): void {
-    this.phraseString$ = this.phraseId$.switchMap((id) => {
+    this.phraseString$ = this.phraseId$.pipe(switchMap((id) => {
       return this.af.database.object(`/phrases/${id}`).map((ref) => ref.phrase)
-    })
+    }))
 
-    this.speechSubscription = this.phraseString$.switchMap((phrase) => this.speech.speak$(phrase)).subscribe()
+    this.speechSubscription = this.phraseString$.pipe(switchMap((phrase) => this.speech.speak$(phrase))).subscribe()
     this.colourSubscription = this.phraseString$.subscribe((phrase) => this.parent.currentColour = this.newColor(phrase))
-    this.font$ = this.phraseString$.map((phrase) => this.newFont(phrase))
+    this.font$ = this.phraseString$.pipe(map((phrase) => this.newFont(phrase)))
     this.music.play();
   }
 
