@@ -1,9 +1,8 @@
-import {map, switchMap} from 'rxjs/operators';
-import { Component, OnInit, OnDestroy, Host } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Observable, Observer, Subscription } from 'rxjs';
-import { AngularFire, FirebaseObjectObservable } from 'angularfire2';
-import * as _ from 'lodash';
+import {map, switchMap, tap, shareReplay} from 'rxjs/operators';
+import { OnInit, OnDestroy, Host } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import * as Color from 'color';
 import * as random from 'seedrandom';
 
@@ -11,16 +10,21 @@ import { AppComponent } from '../app.component';
 import { MusicService } from '../../services/music';
 import { SpeechService } from '../../services/speech';
 
+export interface Phrase {
+  words: string
+  createdAt: Date
+  origin: any[]
+}
 export class PhraseComponent implements OnInit, OnDestroy {
   phraseString$: Observable<string>;
-  phraseId$: Observable<string>;
+  phraseDocument$: Observable<AngularFirestoreDocument<Phrase>>;
   font$: Observable<string>;
   speechSubscription: Subscription;
   colourSubscription: Subscription;
   protected FONTS = ['Baloo', 'Crimson Text', 'Gidugu', 'Griffy', 'Indie Flower', 'Raleway', 'Ranga', 'Roboto', 'Supermercado One'];
 
   constructor(
-    protected af: AngularFire,
+    protected db: AngularFirestore,
     protected music: MusicService,
     protected speech: SpeechService,
     protected route: ActivatedRoute,
@@ -28,10 +32,13 @@ export class PhraseComponent implements OnInit, OnDestroy {
 
   }
 
- ngOnInit(): void {
-    this.phraseString$ = this.phraseId$.pipe(switchMap((id) => {
-      return this.af.database.object(`/phrases/${id}`).map((ref) => ref.phrase)
-    }))
+  ngOnInit(): void {
+    this.phraseString$ = this.phraseDocument$.pipe(
+      switchMap((doc) => doc.valueChanges()),
+      tap((phrase) => console.log(phrase)),
+      map((phrase) => phrase.words),
+      shareReplay(),
+    )
 
     this.speechSubscription = this.phraseString$.pipe(switchMap((phrase) => this.speech.speak$(phrase))).subscribe()
     this.colourSubscription = this.phraseString$.subscribe((phrase) => this.parent.currentColour = this.newColor(phrase))

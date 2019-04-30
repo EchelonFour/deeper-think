@@ -4,8 +4,9 @@ import { RouterModule, Routes, Route, UrlSegment, UrlSegmentGroup } from '@angul
 import { UrlMatchResult } from '@angular/router/src/config';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
-
+import { AngularFireModule } from '@angular/fire'
+import { AngularFirestoreModule } from '@angular/fire/firestore'
+import { environment } from '../environments/environment'
 import { AppComponent } from './app.component';
 
 import { MusicService } from '../services/music';
@@ -13,12 +14,6 @@ import { SpeechService } from '../services/speech';
 import { RotatingPhraseComponent } from './phrase/rotating-phrase.component';
 import { StaticPhraseComponent } from './phrase/static-phrase.component';
 
-const firebaseConfig: FirebaseAppConfig = {
-  apiKey: 'AIzaSyBF_TsfgjGmsojPqdmezj5LbbzQM-uDwes',
-  authDomain: 'deeper-think.firebaseapp.com',
-  databaseURL: 'https://deeper-think.firebaseio.com',
-  storageBucket: 'deeper-think.appspot.com'
-};
 //this wont work until https://github.com/angular/angular/issues/14833 resolved
 // function optionalId(segments: UrlSegment[], group: UrlSegmentGroup, route: Route): UrlMatchResult {
 //   if (segments.length == 1) {
@@ -33,6 +28,7 @@ const routes: Routes = [
   { path: ':id', component: StaticPhraseComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ]
+console.log(environment.firebase)
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,7 +39,8 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
     RouterModule.forRoot(routes),
   ],
   providers: [

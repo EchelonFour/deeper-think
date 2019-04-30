@@ -1,16 +1,14 @@
-import { Component, OnInit, OnDestroy, Host } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Observable, Observer, Subscription } from 'rxjs';
-import { AngularFire, FirebaseObjectObservable } from 'angularfire2';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, combineLatest } from 'rxjs';
 import { PhraseComponent } from './phrase.component';
-import * as _ from 'lodash';
-import * as Color from 'color';
-import * as random from 'seedrandom';
 import * as Clipboard from 'clipboard';
 
 import { AppComponent } from '../app.component';
 import { MusicService } from '../../services/music';
 import { SpeechService } from '../../services/speech';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-static-phrase',
@@ -22,19 +20,23 @@ export class StaticPhraseComponent extends PhraseComponent {
   clipboardResults$: Observable<string>;
 
   constructor(
-    af: AngularFire,
+    db: AngularFirestore,
     music: MusicService,
     speech: SpeechService,
     route: ActivatedRoute,
     parent: AppComponent) {
-      super(af, music, speech, route, parent)
+      super(db, music, speech, route, parent)
   }
 
- ngOnInit(): void {
-    this.phraseId$ = this.route.params.map((params: Params) => params['id'])
+  ngOnInit(): void {
+    const phraseId$ = this.route.params.pipe(map((params) => params['id'] as string))
+    this.phraseDocument$ = phraseId$.pipe(map((id) => this.db.collection('phrases').doc(id)))
     this.clipboard = new Clipboard('.clippy')
     super.ngOnInit()
-    this.clipboardResults$ = this.phraseString$.combineLatest(this.phraseId$, (phrase, id) => `${phrase} https://deeperth.ink/${id}`)
+    this.clipboardResults$ = combineLatest(
+      this.phraseString$,
+      phraseId$
+    ).pipe(map((phrase) => `${phrase[0]} https://deeperth.ink/${phrase[1]}`))
   }
 
   ngOnDestroy(): void {

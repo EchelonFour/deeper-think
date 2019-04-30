@@ -1,28 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, Observer } from 'rxjs';
+import { Observable } from 'rxjs';
 import * as _ from 'lodash';
-
-declare interface Voice {
-  lang: string;
-}
-
-declare class SpeechSynthesisUtterance {
-  voice: Voice;
-  text: string;
-  pitch: number;
-  rate: number;
-}
-
-declare var speechSynthesis: {
-  cancel(): void;
-  getVoices(): Voice[];
-  speak(utterance: SpeechSynthesisUtterance): void;
-};
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class SpeechService {
-  speak$(phrase: string): Observable<any> {
-    return Observable.create((observer: Observer<any>) => {
+  speak$(phrase: string): Observable<void> {
+    return Observable.create(() => {
       const msg = new SpeechSynthesisUtterance();
       msg.voice = _.sample(_.filter(speechSynthesis.getVoices(), (voice) => _.startsWith(voice.lang, 'en-')));
       msg.text = phrase;
@@ -31,6 +15,6 @@ export class SpeechService {
       speechSynthesis.speak(msg);
 
       return () => speechSynthesis.cancel();
-    }).do({ error: (err) => console.error('Speak Error', err) });
+    }).pipe(tap({ error: (err) => console.error('Speak Error', err) }));
   }
 }

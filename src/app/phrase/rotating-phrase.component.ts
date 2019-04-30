@@ -1,12 +1,18 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { Observable, Observer, Subscription } from 'rxjs';
-import { AngularFire } from 'angularfire2';
+import { ActivatedRoute } from '@angular/router';
 import { PhraseComponent } from './phrase.component';
 
 import { AppComponent } from '../app.component';
 import { MusicService } from '../../services/music';
 import { SpeechService } from '../../services/speech';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { map, share, shareReplay } from 'rxjs/operators';
+import * as firebase from 'firebase'
+import { Observable } from 'rxjs';
+
+interface CurrentPhrase {
+  id: firebase.firestore.DocumentReference
+}
 
 @Component({
   selector: 'app-rotating-phrase',
@@ -14,24 +20,28 @@ import { SpeechService } from '../../services/speech';
   styleUrls: ['./phrase.component.css']
 })
 export class RotatingPhraseComponent extends PhraseComponent {
-
+  public phraseUrl$: Observable<string>
   constructor(
-    af: AngularFire,
+    db: AngularFirestore,
     music: MusicService,
     speech: SpeechService,
     route: ActivatedRoute,
     parent: AppComponent) {
-      super(af, music, speech, route, parent)
+      super(db, music, speech, route, parent)
   }
 
- ngOnInit(): void {
-    this.phraseId$ = this.af.database.object('/currentPhrase').map((ref) => ref.$value)
+  ngOnInit(): void {
+    const currentRef = this.db.doc<CurrentPhrase>('/tick/currentPhrase').valueChanges().pipe(
+      shareReplay()
+    )
+    this.phraseUrl$ = currentRef.pipe(map((ref) => `/${ref.id.id}`))
+    this.phraseDocument$ = currentRef.pipe(
+      map((phraseRef) => {
+        console.log(phraseRef)
+        return this.db.doc(phraseRef.id.path)
+      })
+    )
     super.ngOnInit()
-
-  }
-
-  ngOnDestroy(): void {
-    super.ngOnDestroy()
   }
 
 }

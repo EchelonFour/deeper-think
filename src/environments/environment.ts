@@ -4,5 +4,13 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+    apiKey: "AIzaSyBF_TsfgjGmsojPqdmezj5LbbzQM-uDwes",
+    authDomain: "deeper-think.firebaseapp.com",
+    databaseURL: "https://deeper-think.firebaseio.com",
+    projectId: "deeper-think",
+    storageBucket: "deeper-think.appspot.com",
+    messagingSenderId: "628206458048"
+  }
 };
