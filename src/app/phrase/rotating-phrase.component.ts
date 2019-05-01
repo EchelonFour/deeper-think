@@ -6,9 +6,10 @@ import { AppComponent } from '../app.component';
 import { MusicService } from '../../services/music';
 import { SpeechService } from '../../services/speech';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { map, share, shareReplay } from 'rxjs/operators';
-import * as firebase from 'firebase'
-import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
+import * as firebase from 'firebase/app'
+import { Observable, Subscription } from 'rxjs';
+import { TickerService } from '../../services/ticker';
 
 interface CurrentPhrase {
   id: firebase.firestore.DocumentReference
@@ -21,12 +22,15 @@ interface CurrentPhrase {
 })
 export class RotatingPhraseComponent extends PhraseComponent {
   public phraseUrl$: Observable<string>
+  private tickerSubscription: Subscription
   constructor(
     db: AngularFirestore,
     music: MusicService,
     speech: SpeechService,
     route: ActivatedRoute,
-    parent: AppComponent) {
+    parent: AppComponent,
+    private ticker: TickerService,
+    ) {
       super(db, music, speech, route, parent)
   }
 
@@ -41,7 +45,13 @@ export class RotatingPhraseComponent extends PhraseComponent {
         return this.db.doc(phraseRef.id.path)
       })
     )
+    this.tickerSubscription = this.ticker.ticking$.subscribe()
     super.ngOnInit()
+  }
+
+  ngOnDestroy(): void {
+    this.tickerSubscription.unsubscribe()
+    super.ngOnDestroy()
   }
 
 }

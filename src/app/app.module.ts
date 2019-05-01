@@ -13,6 +13,9 @@ import { MusicService } from '../services/music';
 import { SpeechService } from '../services/speech';
 import { RotatingPhraseComponent } from './phrase/rotating-phrase.component';
 import { StaticPhraseComponent } from './phrase/static-phrase.component';
+import { TickerService } from '../services/ticker';
+import 'firebase/app'
+import 'firebase/firestore'
 
 //this wont work until https://github.com/angular/angular/issues/14833 resolved
 // function optionalId(segments: UrlSegment[], group: UrlSegmentGroup, route: Route): UrlMatchResult {
@@ -20,7 +23,7 @@ import { StaticPhraseComponent } from './phrase/static-phrase.component';
 //     return {consumed: segments, posParams: {id: segments[0]}}
 //   }
 //    return {consumed: segments}
-  
+
 // }
 const routes: Routes = [
   //{ component: PhraseComponent, matcher: optionalId },
@@ -45,7 +48,8 @@ console.log(environment.firebase)
   ],
   providers: [
     MusicService,
-    SpeechService
+    SpeechService,
+    TickerService
   ],
   bootstrap: [AppComponent]
 })
