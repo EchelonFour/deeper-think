@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import * as _ from 'lodash';
-import Tone from 'tone';
+import * as Tone from 'tone';
 
 @Injectable()
 export class MusicService {
 
-  pianoLoop: any;
-  noiseLoop: any;
+  pianoLoop: Tone.Loop;
+  noiseLoop: Tone.Loop;
+  noise: Tone.Noise;
   constructor() {
     const NOTES = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
     const OCTIVES = [3, 4]
-    const TIME = ['-', '+']
     const reverb = new Tone.JCReverb().toMaster()
-    const piano = new Tone.PolySynth(4, Tone.Synth, {
+    const piano = new Tone.PolySynth().set({
 			"volume" : -25,
       "envelope" : {
         attackCurve: "sine",
@@ -27,28 +26,38 @@ export class MusicService {
         type: "sine4"
 			},
 			"portamento" : 0.05
-		}).connect(reverb)
-    
-    this.pianoLoop = new Tone.Loop((time: any) => {
-      //triggered every eighth note. 
-      piano.triggerAttackRelease(Tone.Frequency(`${_.sample(NOTES)}${_.sample(OCTIVES)}`), `4n ${_.sample(TIME)} ${_.random(0, 0.3)}`)
+    }).connect(reverb)
+
+    this.pianoLoop = new Tone.Loop((time) => {
+      const toneLength = Tone.Time('4n') + _.random(-0.3, 0.3)
+      if (toneLength > 0) {
+        piano.triggerAttackRelease(Tone.Frequency(`${_.sample(NOTES)}${_.sample(OCTIVES)}`), toneLength)
+      }
     }, "4n")
     this.pianoLoop.humanize = true
     this.pianoLoop.probability = 0.7
-    const noise = new Tone.Noise({
-			"volume" : -40,
-			"type" : "brown"
-    }).toMaster().start();
-    this.noiseLoop = new Tone.Loop((time: any) => {
-      noise.volume.rampTo(_.random(-40, -20), '1m')
-    }, '1m')
+    this.noise = new Tone.Noise('brown').toMaster()
+    this.noise.volume.value = -40
+    this.noiseLoop = new Tone.Loop(() => {
+      this.noise.volume.rampTo(_.random(-40, -20), Tone.Time('2m') - Tone.Time('8n'))
+    }, '2m')
   }
-  play(): void {
-    this.noiseLoop.start()
-    this.pianoLoop.start()
-    Tone.Transport.start(0)    
+  audioAllowed(): boolean {
+    return ((Tone as any).context.rawContext as AudioContext).state === 'running'
+  }
+  async play(): Promise<void> {
+    // debugger
+    await this.resume()
+    this.noise.start()
+    this.noiseLoop.start(0)
+    this.pianoLoop.start(0)
+    Tone.Transport.start()
+  }
+  async resume(): Promise<any> {
+    return await (Tone as any).start()
   }
   stop(): void {
-    Tone.Transport.stop(0)
+    this.noise.stop()
+    Tone.Transport.stop()
   }
 }

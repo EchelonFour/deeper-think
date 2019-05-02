@@ -1,5 +1,5 @@
 import {map, switchMap, tap, shareReplay} from 'rxjs/operators';
-import { OnInit, OnDestroy, Host } from '@angular/core';
+import { OnInit, OnDestroy, Host, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
@@ -21,6 +21,9 @@ export class PhraseComponent implements OnInit, OnDestroy {
   font$: Observable<string>;
   speechSubscription: Subscription;
   colourSubscription: Subscription;
+  paused = true;
+  protected mouseUnlisten: () => void = null;
+  protected touchUnlisten: () => void = null;
   protected FONTS = ['Baloo', 'Crimson Text', 'Gidugu', 'Griffy', 'Indie Flower', 'Raleway', 'Ranga', 'Roboto', 'Supermercado One'];
 
   constructor(
@@ -28,7 +31,8 @@ export class PhraseComponent implements OnInit, OnDestroy {
     protected music: MusicService,
     protected speech: SpeechService,
     protected route: ActivatedRoute,
-    @Host() protected parent: AppComponent) {
+    protected renderer: Renderer2,
+    @Host() protected parent: AppComponent,) {
 
   }
 
@@ -39,17 +43,56 @@ export class PhraseComponent implements OnInit, OnDestroy {
       map((phrase) => phrase.words),
       shareReplay(),
     )
+    if (this.music.audioAllowed()) {
+      this.startNoise()
+    } else {
+      this.mouseUnlisten = this.renderer.listen('window', 'mouseup', () => {
+        this.startNoiseOnAllowed()
+      })
+      this.touchUnlisten = this.renderer.listen('window', 'touchend', () => {
+        this.startNoiseOnAllowed()
+      })
+    }
 
-    this.speechSubscription = this.phraseString$.pipe(switchMap((phrase) => this.speech.speak$(phrase))).subscribe()
     this.colourSubscription = this.phraseString$.subscribe((phrase) => this.parent.currentColour = this.newColor(phrase))
     this.font$ = this.phraseString$.pipe(map((phrase) => this.newFont(phrase)))
-    this.music.play();
   }
 
   ngOnDestroy(): void {
-    this.music.stop();
-    this.speechSubscription.unsubscribe()
+    this.stopNoise()
     this.colourSubscription.unsubscribe()
+  }
+
+  protected startNoiseOnAllowed() {
+    this.startNoise()
+    if (this.mouseUnlisten) {
+      this.mouseUnlisten()
+    }
+    if (this.touchUnlisten) {
+      this.touchUnlisten()
+    }
+  }
+  toggleNoise() {
+    if (this.paused) {
+      this.startNoise()
+    } else {
+      this.stopNoise()
+    }
+  }
+  protected startNoise() {
+    this.paused = false
+    if (!this.speechSubscription) {
+      this.speechSubscription = this.phraseString$.pipe(switchMap((phrase) => this.speech.speak$(phrase))).subscribe()
+    }
+    this.music.play()
+  }
+  protected stopNoise() {
+    this.paused = true
+    if (this.speechSubscription) {
+      this.speechSubscription.unsubscribe()
+      this.speechSubscription = null
+    }
+    this.music.stop()
   }
 
   protected range(seed: string, lower: number, upper: number) {

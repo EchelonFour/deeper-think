@@ -4,4 +4,5 @@
 
 <span class="centred share" >
 <button [routerLink]="phraseUrl$ | async" routerLinkActive="active"><i class="fa fa-share" aria-hidden="true"></i></button>
+<button (click)="toggleNoise()">{{ paused ? 'Play' : 'Pause'}}</button>
 </span>

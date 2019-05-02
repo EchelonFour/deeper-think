@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, combineLatest } from 'rxjs';
 import { PhraseComponent } from './phrase.component';
@@ -24,8 +24,9 @@ export class StaticPhraseComponent extends PhraseComponent {
     music: MusicService,
     speech: SpeechService,
     route: ActivatedRoute,
+    renderer: Renderer2,
     parent: AppComponent) {
-      super(db, music, speech, route, parent)
+      super(db, music, speech, route, renderer, parent)
   }
 
   ngOnInit(): void {
