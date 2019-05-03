@@ -4,4 +4,3 @@ firebase.initializeApp()
 
 export default firebase
 export const firestore = firebase.firestore()
-export const database = firebase.database()

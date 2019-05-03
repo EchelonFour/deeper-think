@@ -1,24 +1,25 @@
 import * as functions from 'firebase-functions'
 import * as fs from 'fs-extra'
+import {format as urlFormat } from 'url'
 import * as language from '@google-cloud/language'
 import * as cheerio from 'cheerio'
-import { firestore, database } from './firebase'
+import { firestore } from './firebase'
 import { NLPToTree } from './nlp_process'
 import { generatePhrase } from './generate';
 
 export const prerender = functions.https.onRequest(async (req, res) => {
     try {
         const data = await fs.readFile('index.html', 'utf8')
-        const snapshot = await database.ref(`/phrases/${req.path}`).once('value')
+        const snapshot = await firestore.collection('phrases').doc(req.path).get()
 
-        const phrase = snapshot.val()
-        if (!phrase || !phrase.phrase) {
+        if (!snapshot.exists) {
             throw new Error('404 probably')
         }
-        const phraseString = phrase.phrase
+        const words = snapshot.data().words
+        const fullUrl = urlFormat({protocol: req.protocol, host: req.hostname, pathname: req.originalUrl})
         const html = cheerio.load(data)
-        html("meta[property='og:description']").attr('content', phraseString)
-        html("meta[property='og:url']").attr('content', req.originalUrl)
+        html("meta[property='og:description']").attr('content', words)
+        html("meta[property='og:url']").attr('content', fullUrl)
         const htmlString = html.html()
         res.type('html')
         res.end(htmlString)
