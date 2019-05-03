@@ -10,6 +10,7 @@ import { map, shareReplay } from 'rxjs/operators';
 import * as firebase from 'firebase/app'
 import { Observable, Subscription } from 'rxjs';
 import { TickerService } from '../../services/ticker';
+import { faShare } from '@fortawesome/free-solid-svg-icons';
 
 interface CurrentPhrase {
   id: firebase.firestore.DocumentReference
@@ -23,6 +24,7 @@ interface CurrentPhrase {
 export class RotatingPhraseComponent extends PhraseComponent {
   public phraseUrl$: Observable<string>
   private tickerSubscription: Subscription
+  shareIcon = faShare
   constructor(
     db: AngularFirestore,
     music: MusicService,

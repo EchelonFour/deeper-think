@@ -5,6 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import * as Color from 'color';
 import * as random from 'seedrandom';
+import { faVolumeUp, faVolumeMute } from '@fortawesome/free-solid-svg-icons';
 
 import { AppComponent } from '../app.component';
 import { MusicService } from '../../services/music';
@@ -78,6 +79,12 @@ export class PhraseComponent implements OnInit, OnDestroy {
     } else {
       this.stopNoise()
     }
+  }
+  noiseIcon() {
+    if (this.paused) {
+      return faVolumeMute
+    }
+    return faVolumeUp
   }
   protected startNoise() {
     this.paused = false

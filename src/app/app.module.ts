@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AngularFireModule } from '@angular/fire'
 import { AngularFirestoreModule } from '@angular/fire/firestore'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { environment } from '../environments/environment'
 import { AppComponent } from './app.component';
 
@@ -45,6 +46,7 @@ console.log(environment.firebase)
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     RouterModule.forRoot(routes),
+    FontAwesomeModule,
   ],
   providers: [
     MusicService,

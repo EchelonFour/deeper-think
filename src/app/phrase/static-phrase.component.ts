@@ -9,6 +9,7 @@ import { MusicService } from '../../services/music';
 import { SpeechService } from '../../services/speech';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
+import { faArrowLeft, faClipboard } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-static-phrase',
@@ -18,6 +19,8 @@ import { map } from 'rxjs/operators';
 export class StaticPhraseComponent extends PhraseComponent {
   protected clipboard: Clipboard;
   clipboardResults$: Observable<string>;
+  backIcon = faArrowLeft
+  clipboardIcon = faClipboard
 
   constructor(
     db: AngularFirestore,

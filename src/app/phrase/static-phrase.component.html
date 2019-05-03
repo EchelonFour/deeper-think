@@ -3,6 +3,7 @@
 </span>
 
 <span class="centred share" >
-<button routerLink="/" routerLinkActive="active"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>&nbsp;
-<button class='clippy' [attr.data-clipboard-text]="clipboardResults$ | async"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
+<button routerLink="/" routerLinkActive="active"><fa-icon [icon]="backIcon"></fa-icon></button>&nbsp;
+<button class='clippy' [attr.data-clipboard-text]="clipboardResults$ | async"><fa-icon [icon]="clipboardIcon"></fa-icon></button>
+<button (click)="toggleNoise()"><fa-icon [icon]="noiseIcon()"></fa-icon></button>
 </span>
