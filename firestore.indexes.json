@@ -47,7 +47,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "ta",
+          "fieldPath": "tag",
           "order": "ASCENDING"
         },
         {
