@@ -8,7 +8,7 @@ const firestore = firebase.firestore()
 const sourcesRef = firestore.collection('sources')
 async function load() {
     console.log('getting phrases')
-    const sources: {sentences: string[]} = JSON.parse(readFileSync(process.argv[2]).toString('utf8'))
+    const sources: {sentences: string[]} = JSON.parse(readFileSync(process.argv[2], 'utf8'))
     let currentBatch = firestore.batch()
     let currentBatchCount = 0
     for (const sentence of sources.sentences) {
