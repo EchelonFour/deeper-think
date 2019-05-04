@@ -23,6 +23,7 @@
     "@types/cheerio": "^0.22.7",
     "@types/lodash": "^4.14.106",
     "@types/seedrandom": "^2.4.27",
+    "ts-node": "^8.1.0",
     "tslint": "^5.15.0",
     "typescript": "^3.4.2"
   },
