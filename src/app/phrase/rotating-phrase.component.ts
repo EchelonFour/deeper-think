@@ -39,7 +39,7 @@ export class RotatingPhraseComponent extends PhraseComponent {
 
   ngOnInit(): void {
     const currentRef = this.db.doc<CurrentPhrase>('/tick/currentPhrase').valueChanges().pipe(
-      shareReplay()
+      shareReplay(1)
     )
     this.phraseUrl$ = currentRef.pipe(map((ref) => `/${ref.id.id}`))
     this.phraseDocument$ = currentRef.pipe(

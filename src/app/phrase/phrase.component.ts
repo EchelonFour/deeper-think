@@ -1,4 +1,4 @@
-import {map, switchMap, tap, shareReplay} from 'rxjs/operators';
+import {map, switchMap, tap, shareReplay, startWith, first} from 'rxjs/operators';
 import { OnInit, OnDestroy, Host, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -10,15 +10,21 @@ import { faVolumeUp, faVolumeMute } from '@fortawesome/free-solid-svg-icons';
 import { AppComponent } from '../app.component';
 import { MusicService } from '../../services/music';
 import { SpeechService } from '../../services/speech';
+import * as firebase from 'firebase/app';
 
 export interface Phrase {
   words: string
   createdAt: Date
   origin: any[]
 }
+export interface Upvote {
+  votes: number
+}
 export class PhraseComponent implements OnInit, OnDestroy {
   phraseString$: Observable<string>;
   phraseDocument$: Observable<AngularFirestoreDocument<Phrase>>;
+  upvoteDocument$: Observable<AngularFirestoreDocument<Upvote>>;
+  upvoteNumber$: Observable<number>;
   font$: Observable<string>;
   speechSubscription: Subscription;
   colourSubscription: Subscription;
@@ -38,11 +44,20 @@ export class PhraseComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.upvoteDocument$ = this.phraseDocument$.pipe(
+      map((doc) => doc.collection('votes').doc('up'))
+    )
     this.phraseString$ = this.phraseDocument$.pipe(
       switchMap((doc) => doc.valueChanges()),
       tap((phrase) => console.log(phrase)),
       map((phrase) => phrase.words),
-      shareReplay(),
+      shareReplay(1),
+    )
+    this.upvoteNumber$ = this.upvoteDocument$.pipe(
+      switchMap((doc) => doc.valueChanges()),
+      map((upvote) => upvote && upvote.votes || 0),
+      startWith(0),
+      shareReplay(1),
     )
     if (this.music.audioAllowed()) {
       this.startNoise()
@@ -113,4 +128,10 @@ export class PhraseComponent implements OnInit, OnDestroy {
     return this.parent.currentColour.hue(this.range(phrase, 0, 360))
   }
 
+  public async upvote(): Promise<void> {
+    this.upvoteDocument$.subscribe((val) => console.log(val.ref.path))
+    const upvoteDoc = await this.upvoteDocument$.pipe(first()).toPromise()
+    console.log('sending updoot', upvoteDoc.ref.path)
+    await upvoteDoc.set({votes: firebase.firestore.FieldValue.increment(1) as unknown as number}, {merge: true}) //like, I know
+  }
 }

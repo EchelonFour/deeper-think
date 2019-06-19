@@ -5,4 +5,5 @@
 <span class="centred share" >
 <button [routerLink]="phraseUrl$ | async" routerLinkActive="active"><fa-icon [icon]="shareIcon"></fa-icon></button>
 <button (click)="toggleNoise()"><fa-icon [icon]="noiseIcon()"></fa-icon></button>
+<button (click)="upvote()">{{ upvoteNumber$ | async }}</button>
 </span>
