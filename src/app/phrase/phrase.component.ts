@@ -2,7 +2,7 @@ import {map, switchMap, tap, shareReplay, startWith, first} from 'rxjs/operators
 import { OnInit, OnDestroy, Host, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import * as Color from 'color';
 import * as random from 'seedrandom';
 import { faVolumeUp, faVolumeMute } from '@fortawesome/free-solid-svg-icons';
@@ -19,11 +19,13 @@ export interface Phrase {
 }
 export interface Upvote {
   votes: number
+  needsAggregation: boolean
 }
+const NUMBER_OF_VOTE_SHARDS = 5
 export class PhraseComponent implements OnInit, OnDestroy {
   phraseString$: Observable<string>;
   phraseDocument$: Observable<AngularFirestoreDocument<Phrase>>;
-  upvoteDocument$: Observable<AngularFirestoreDocument<Upvote>>;
+  upvoteCollection$: Observable<AngularFirestoreCollection<Upvote>>;
   upvoteNumber$: Observable<number>;
   font$: Observable<string>;
   speechSubscription: Subscription;
@@ -44,8 +46,8 @@ export class PhraseComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.upvoteDocument$ = this.phraseDocument$.pipe(
-      map((doc) => doc.collection('votes').doc('up'))
+    this.upvoteCollection$ = this.phraseDocument$.pipe(
+      map((doc) => doc.collection('upvotes'))
     )
     this.phraseString$ = this.phraseDocument$.pipe(
       switchMap((doc) => doc.valueChanges()),
@@ -53,9 +55,10 @@ export class PhraseComponent implements OnInit, OnDestroy {
       map((phrase) => phrase.words),
       shareReplay(1),
     )
-    this.upvoteNumber$ = this.upvoteDocument$.pipe(
+    this.upvoteNumber$ = this.upvoteCollection$.pipe(
       switchMap((doc) => doc.valueChanges()),
-      map((upvote) => upvote && upvote.votes || 0),
+      tap((upvotes) => console.log('upvotes', upvotes)),
+      map((upvotes) => upvotes.reduce((runningTotal, upvote)=> runningTotal + upvote.votes, 0)),
       startWith(0),
       shareReplay(1),
     )
@@ -129,9 +132,12 @@ export class PhraseComponent implements OnInit, OnDestroy {
   }
 
   public async upvote(): Promise<void> {
-    this.upvoteDocument$.subscribe((val) => console.log(val.ref.path))
-    const upvoteDoc = await this.upvoteDocument$.pipe(first()).toPromise()
+    const upvoteCollection = await this.upvoteCollection$.pipe(first()).toPromise()
+    const upvoteDoc = upvoteCollection.doc<Upvote>(Math.floor(Math.random() * NUMBER_OF_VOTE_SHARDS).toString())
     console.log('sending updoot', upvoteDoc.ref.path)
-    await upvoteDoc.set({votes: firebase.firestore.FieldValue.increment(1) as unknown as number}, {merge: true}) //like, I know
+    await upvoteDoc.set({
+      votes: firebase.firestore.FieldValue.increment(1) as unknown as number, //like, I know
+      needsAggregation: true,
+    }, {merge: true})
   }
 }

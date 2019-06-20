@@ -2,10 +2,10 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /phrases/{phrase} {
       allow get;
-      match /votes/up {
-        allow get;
-        allow create: if request.resource.data.size() == 1 && 'votes' in request.resource.data && request.resource.data.votes == 1;
-        allow update: if request.resource.data.size() == 1 && 'votes' in request.resource.data && request.resource.data.votes == resource.data.votes + 1;
+      match /upvotes/{shard} {
+        allow get, list;
+        allow create: if int(shard) < 5 && int(shard) >= 0 && request.resource.data.size() == 2 && request.resource.data.votes == 1 && request.resource.data.needsAggregation == true;
+        allow update: if int(shard) < 5 && int(shard) >= 0 && request.resource.data.size() == 2 && request.resource.data.votes == resource.data.votes + 1 && request.resource.data.needsAggregation == true;
       }
     }
     match /tick/tick {
