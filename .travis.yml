@@ -3,7 +3,7 @@ script: npm run build -- --prod
 before_script: "cd functions && npm ci && cd .."
 deploy:
   provider: firebase
-  on: master
+  on: satan
   skip_cleanup: true
   token:
     secure: "med5G4+eC+Ao3SrUP27Qg+wQ2nkqsehSEzRjq7SUuHVjTFcTfCBPPcM/t+z1FU/leCZmzIomB/WWiN0988CLNC/dx7YCdb807JHB53kq+WNLzkbLa0HYxrELPUKbCqmajwMDVhRQ5qxc+LaDyi+a9BNQdwvp1aOs9FcCFZZebwnfErIy2wK2XS8NIBNvjAvvFwaEbe5tAKM0tlfluL3Pm2F8s5jY9dR0F/r6JWi8qdwHWTLJLPtHAryPovrPhMDNtFtUT4al7spe5QpEo2yNsJclc3SaqqPUqOiJIJ8KpvG5Lo8pKLzuJTpLXlrD4G3BBmq5Au2HikNvXEvfsfnuv4b2J/E3ZpYlsRvdqSWuIgSfyJjeUvA2Bp5NzRjeYuV7ZC2B8x3aWOzE71PuXf5zEylC8u8fApH86G2ecRwspcyaB3BvJu267eCmubJWvtZ/t4H5y4FVFTW91aPE8gTOKnf1JWt8aNO8M817QBdddshQAG/O93vPINz1A38Aco4x37vCm1OegcCKtqmQcCXXA7C1RQhwYc7ozJBM26202h1GXUraKLoiqwkGbjIGuR77R1RzrEbrPfKeqmJx9O8U73VWbjql4QR8KjOfHaMCiHY6cT+kmNG42KDGop+oX8fSI1zaZxFEnxnwJEO5P/dCJoYCWJwZ0O5cNxyKUT5mNbI="
