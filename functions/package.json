@@ -19,13 +19,14 @@
     "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "@google-cloud/firestore": "^1.2.0",
+    "@google-cloud/firestore": "^2.6.0",
     "@types/cheerio": "^0.22.7",
     "@types/lodash": "^4.14.106",
+    "@types/node": "^8.10.59",
     "@types/seedrandom": "^2.4.27",
     "ts-node": "^8.1.0",
     "tslint": "^5.15.0",
-    "typescript": "^3.4.2"
+    "typescript": "^3.7.2"
   },
   "private": true,
   "engines": {
