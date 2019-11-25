@@ -1,11 +1,13 @@
 export const environment = {
   production: true,
   firebase: {
-    apiKey: "AIzaSyBF_TsfgjGmsojPqdmezj5LbbzQM-uDwes",
-    authDomain: "deeper-think.firebaseapp.com",
-    databaseURL: "https://deeper-think.firebaseio.com",
-    projectId: "deeper-think",
-    storageBucket: "deeper-think.appspot.com",
-    messagingSenderId: "628206458048"
+    apiKey: "AIzaSyDqsV-ESkGLBbeXuJwo_AoOOvL5GKeIARk",
+    authDomain: "satan-website.firebaseapp.com",
+    databaseURL: "https://satan-website.firebaseio.com",
+    projectId: "satan-website",
+    storageBucket: "satan-website.appspot.com",
+    messagingSenderId: "703585339249",
+    appId: "1:703585339249:web:7bf238458861afdc1d98d0",
+    measurementId: "G-2ZRMZYPTWX"
   }
 };

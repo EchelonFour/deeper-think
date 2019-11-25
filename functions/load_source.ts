@@ -2,7 +2,7 @@ import * as firebase from 'firebase-admin'
 import { readFileSync } from 'fs';
 firebase.initializeApp({
     credential: firebase.credential.applicationDefault(),
-    databaseURL: "https://deeper-think.firebaseio.com",
+    databaseURL: "https://satan-website.firebaseio.com",
 })
 const firestore = firebase.firestore()
 const sourcesRef = firestore.collection('sources')

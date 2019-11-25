@@ -1,7 +1,7 @@
 import * as firebase from 'firebase-admin'
 firebase.initializeApp({
     credential: firebase.credential.applicationDefault(),
-    databaseURL: "https://deeper-think.firebaseio.com",
+    databaseURL: "https://satan-website.firebaseio.com",
 })
 const database = firebase.database()
 const firestore = firebase.firestore()

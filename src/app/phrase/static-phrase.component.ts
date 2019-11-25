@@ -40,7 +40,7 @@ export class StaticPhraseComponent extends PhraseComponent {
     this.clipboardResults$ = combineLatest(
       this.phraseString$,
       phraseId$
-    ).pipe(map((phrase) => `${phrase[0]} https://deeperth.ink/${phrase[1]}`))
+    ).pipe(map((phrase) => `${phrase[0]} https://satan.website/${phrase[1]}`))
   }
 
   ngOnDestroy(): void {
