@@ -9,23 +9,23 @@ export class MusicService {
   noiseLoop: Tone.Loop;
   noise: Tone.Noise;
   constructor() {
-    const NOTES = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-    const OCTIVES = [3, 4]
+    const NOTES = ['D', 'Eb', 'F', 'G', 'A', 'Bb', 'C']
+    const OCTIVES = [2, 3]
     const reverb = new Tone.JCReverb().toMaster()
     const piano = new Tone.PolySynth().set({
-			"volume" : -25,
+      "volume" : -25,
       "envelope" : {
         attackCurve: "sine",
         releaseCurve: "sine",
-				attack: 0.4,
-				decay: 0.6,
-				sustain: 0.1,
-        release: 1
-			},
-			"oscillator" : {
+        attack: 0.4,
+        decay: 0.1,
+        sustain: 0.1,
+        release: 0.4
+      },
+      "oscillator" : {
         type: "sine4"
-			},
-			"portamento" : 0.05
+      },
+      "portamento" : 0.05
     }).connect(reverb)
 
     this.pianoLoop = new Tone.Loop((time) => {
@@ -33,7 +33,7 @@ export class MusicService {
       if (toneLength > 0) {
         piano.triggerAttackRelease(Tone.Frequency(`${_.sample(NOTES)}${_.sample(OCTIVES)}`), toneLength)
       }
-    }, "4n")
+    }, "8n")
     this.pianoLoop.humanize = true
     this.pianoLoop.probability = 0.7
     this.noise = new Tone.Noise('brown').toMaster()
