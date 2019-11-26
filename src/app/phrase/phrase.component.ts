@@ -33,7 +33,7 @@ export class PhraseComponent implements OnInit, OnDestroy {
   paused = true;
   protected mouseUnlisten: () => void = null;
   protected touchUnlisten: () => void = null;
-  protected FONTS = ['Baloo', 'Crimson Text', 'Gidugu', 'Griffy', 'Indie Flower', 'Raleway', 'Ranga', 'Roboto', 'Supermercado One'];
+  protected FONTS = ['Amiri', 'UnifrakturMaguntia', 'Special Elite', 'Yeseva One'];
 
   constructor(
     protected db: AngularFirestore,
@@ -125,7 +125,7 @@ export class PhraseComponent implements OnInit, OnDestroy {
     return lower + Math.floor(r() * (upper - lower + 1))
   }
   newFont(phrase: string): string {
-    return `${this.FONTS[this.range(phrase, 0, this.FONTS.length - 1)]}, sans-serif`;
+    return `${this.FONTS[this.range(phrase, 0, this.FONTS.length - 1)]}, cursive, sans-serif`;
   }
   newColor(phrase: string): Color.Color {
     return this.parent.currentColour.hue(this.range(phrase, 0, 360))
