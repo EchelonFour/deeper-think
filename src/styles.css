@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Amiri|UnifrakturMaguntia|Special+Elite|Yeseva+One&display=swap');
 body {
+    background-color: hsl(0, 40%, 20%);
     transition: background-color 20s ease;
 }
 .centred {
@@ -9,7 +10,7 @@ body {
     margin: 0;
     text-align: center;
     font-family: 'Roboto', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, cursive, sans-serif;
-
+    color: #fff;
 }
 .centred.quote {
     height: 51vh;
@@ -27,9 +28,9 @@ body {
     }
 }
 button {
-    color: #fff;
-    background-color: #928FA3;
-    border-color: #928FA3;
+    color: #000;
+    background-color: #666;
+    border-color: #666;
     display: inline-block;
     font-weight: 400;
     line-height: 1.25;
