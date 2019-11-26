@@ -8,9 +8,9 @@ export class MusicService {
   pianoLoop: Tone.Loop;
   noiseLoop: Tone.Loop;
   noise: Tone.Noise;
+  private lastNoteIndex: number = 0;
   constructor() {
-    const NOTES = ['D', 'Eb', 'F', 'G', 'A', 'Bb', 'C']
-    const OCTIVES = [2, 3]
+    const NOTES = ['D2', 'Eb2', 'F2', 'G2', 'A2', 'Bb2', 'C2', 'D3', 'Eb3', 'F3', 'G3', 'A3', 'Bb3', 'C3', 'D4']
     const reverb = new Tone.JCReverb().toMaster()
     const piano = new Tone.PolySynth().set({
       "volume" : -25,
@@ -31,7 +31,12 @@ export class MusicService {
     this.pianoLoop = new Tone.Loop((time) => {
       const toneLength = Tone.Time('4n') + _.random(-0.3, 0.3)
       if (toneLength > 0) {
-        piano.triggerAttackRelease(Tone.Frequency(`${_.sample(NOTES)}${_.sample(OCTIVES)}`), toneLength)
+        let newNoteIndex = (this.lastNoteIndex + _.random(-1, 1)) % NOTES.length
+        if (newNoteIndex < 0) {
+          newNoteIndex = NOTES.length + newNoteIndex //wrap it around
+        }
+        piano.triggerAttackRelease(Tone.Frequency(NOTES[newNoteIndex]), toneLength)
+        this.lastNoteIndex = newNoteIndex
       }
     }, "8n")
     this.pianoLoop.humanize = true
