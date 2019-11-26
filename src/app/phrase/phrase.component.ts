@@ -33,7 +33,7 @@ export class PhraseComponent implements OnInit, OnDestroy {
   paused = true;
   protected mouseUnlisten: () => void = null;
   protected touchUnlisten: () => void = null;
-  protected FONTS = ['Amiri', 'UnifrakturMaguntia', 'Special Elite', 'Yeseva One'];
+  protected FONTS = ['Amiri', 'Arima Madurai', 'Chelsea Market', 'Special Elite', 'Yeseva One'];
 
   constructor(
     protected db: AngularFirestore,

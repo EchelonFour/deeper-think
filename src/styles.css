@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Amiri|UnifrakturMaguntia|Special+Elite|Yeseva+One&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Amiri|Arima+Madurai|Chelsea+Market|Special+Elite|Yeseva+One&display=swap');
 body {
     background-color: hsl(0, 40%, 20%);
     transition: background-color 20s ease;
@@ -9,7 +9,7 @@ body {
     padding: 0 10vw;
     margin: 0;
     text-align: center;
-    font-family: 'Roboto', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, cursive, sans-serif;
+    font-family: 'Amiri', Arial, cursive, sans-serif;
     color: #fff;
 }
 .centred.quote {
