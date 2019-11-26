@@ -36,10 +36,10 @@ export class MusicService {
     }, "8n")
     this.pianoLoop.humanize = true
     this.pianoLoop.probability = 0.7
-    this.noise = new Tone.Noise('brown').toMaster()
-    this.noise.volume.value = -40
+    this.noise = new Tone.Noise({type: 'brown', playbackRate: 0.1}).toMaster()
+    this.noise.volume.value = -20
     this.noiseLoop = new Tone.Loop(() => {
-      this.noise.volume.rampTo(_.random(-40, -20), Tone.Time('2m') - Tone.Time('8n'))
+      this.noise.volume.rampTo(_.random(-20, -10), Tone.Time('2m') - Tone.Time('8n'))
     }, '2m')
   }
   audioAllowed(): boolean {
