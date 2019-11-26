@@ -128,7 +128,7 @@ export class PhraseComponent implements OnInit, OnDestroy {
     return `${this.FONTS[this.range(phrase, 0, this.FONTS.length - 1)]}, cursive, sans-serif`;
   }
   newColor(phrase: string): Color.Color {
-    return this.parent.currentColour.hue(this.range(phrase, 0, 360))
+    return this.parent.currentColour.hue((this.range(phrase, 0, 90) + 300) % 360)
   }
 
   public async upvote(): Promise<void> {
